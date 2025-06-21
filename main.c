@@ -1,9 +1,15 @@
 #include "wheel.h"
+#include "ui.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+#define BOX_WIDTH 80
+#define BOX_HEIGHT 180
 
 int main(int argc, char* argv[]) {
     Display* display;
@@ -21,7 +27,7 @@ int main(int argc, char* argv[]) {
     screen = DefaultScreen(display);
 
     window = XCreateSimpleWindow(display, RootWindow(display, screen),
-                             100, 100, 800, 600, 1,
+                             100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, 1,
                              BlackPixel(display, screen), 0x212529);
 
     XStoreName(display, window, "X11 Simple Window");
@@ -44,6 +50,7 @@ int main(int argc, char* argv[]) {
             case Expose:
                 if (event.xexpose.count == 0) {
                     draw_roulette_wheel(display, window, gc, 500, 500);
+                    draw_odd_numbers_box(display, window, gc,  SCREEN_WIDTH - 100, SCREEN_HEIGHT / 3, BOX_WIDTH, BOX_HEIGHT);
                     XFlush(display);
                 }
                 break;

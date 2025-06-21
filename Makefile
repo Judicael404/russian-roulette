@@ -7,7 +7,7 @@ LDFLAGS = -lX11 -lm
 TARGET = roulette
 
 # Source files
-SRCS = main.c wheel.c
+SRCS = main.c wheel.c ui.c
 OBJS = $(SRCS:.c=.o)
 
 # Default target
