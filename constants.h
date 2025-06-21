@@ -12,6 +12,7 @@
 #define RED 0xFF0000
 #define BLACK 0x000000
 #define WHITE 0xFFFFFF
+#define GOLD 0xFFD700
 
 #define MAX_LEN 256 // maximum length of a string
 #define MAX_DIRS 14 // maximum number of directories

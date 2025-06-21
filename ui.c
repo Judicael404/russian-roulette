@@ -27,6 +27,23 @@ void draw_box_text(Display *dpy, Window win, GC gc, int x, int y, const char* te
     XDrawString(dpy, win, gc, x, y, text, strlen(text));
 }
 
+void draw_result_text(Display *dpy, Window win, GC gc, int x, int y, const char* result) {
+    int screen = DefaultScreen(dpy);
+    
+    // Draw background box for result
+    XSetForeground(dpy, gc, WhitePixel(dpy, screen));
+    XFillRectangle(dpy, win, gc, x, y, BOX_WIDTH, 60);
+    
+    XSetForeground(dpy, gc, BlackPixel(dpy, screen));
+    XDrawRectangle(dpy, win, gc, x, y, BOX_WIDTH, 60);
+    
+    // Draw "Result:" label
+    draw_box_text(dpy, win, gc, x + 5, y + 15, "Result:");
+    
+    // Draw the actual result
+    draw_box_text(dpy, win, gc, x + 5, y + 35, result);
+}
+
 void draw_odd_numbers_box(Display *dpy, Window win, GC gc, int x, int y, int width, int height) {
     int screen = DefaultScreen(dpy);
 
@@ -51,10 +68,9 @@ void draw_odd_numbers_box(Display *dpy, Window win, GC gc, int x, int y, int wid
         return; // Error reading directories
     }
 
-    // // for debugging: print the directories
-    // for (int i = 0; i < count; i++) {
-    //     printf("Directory %d: %s\n", i, dirs[i]);
-    // }
+    // Add title
+    draw_box_text(dpy, win, gc, tx, ty, "Odd Numbers:");
+    ty += line_height + 5;
 
     int dir_idx = 0;
     for (int i = 1; i < NUM_SEGMENTS && dir_idx < count; i += 2, dir_idx++) {
@@ -64,4 +80,7 @@ void draw_odd_numbers_box(Display *dpy, Window win, GC gc, int x, int y, int wid
         ty += line_height;
         if (ty > y + height - line_height) break;
     }
+    
+    // Free allocated memory
+    free_directories(dirs, count);
 }

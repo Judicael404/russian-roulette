@@ -4,5 +4,6 @@
 #include <X11/Xlib.h>
 
 void draw_roulette_wheel(Display *dpy, Window win, GC gc, int width, int height);
+void draw_roulette_wheel_rotated(Display *dpy, Window win, GC gc, int width, int height, int rotation, int selected_segment);
 
 #endif
