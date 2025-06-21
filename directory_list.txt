@@ -1,0 +1,14 @@
+/boot
+/etc
+/bin
+/sbin
+/lib
+/lib64
+/usr
+/var
+/dev
+/proc
+/sys
+/run
+/root
+/home

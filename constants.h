@@ -3,8 +3,8 @@
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
-#define BOX_WIDTH 80
-#define BOX_HEIGHT 180
+#define BOX_WIDTH 120
+#define BOX_HEIGHT 200
 
 #define NUM_SEGMENTS 24
 
@@ -12,5 +12,8 @@
 #define RED 0xFF0000
 #define BLACK 0x000000
 #define WHITE 0xFFFFFF
+
+#define MAX_LEN 256 // maximum length of a string
+#define MAX_DIRS 14 // maximum number of directories
 
 #endif
