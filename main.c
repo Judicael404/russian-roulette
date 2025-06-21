@@ -1,3 +1,4 @@
+#include "wheel.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdio.h>
@@ -22,7 +23,7 @@ int main(int argc, char* argv[]) {
     window = XCreateSimpleWindow(display, RootWindow(display, screen),
                              100, 100, 800, 600, 1,
                              BlackPixel(display, screen), 0x212529);
-                             
+
     XStoreName(display, window, "X11 Simple Window");
 
     Atom wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", False);
@@ -42,6 +43,8 @@ int main(int argc, char* argv[]) {
         switch (event.type) {
             case Expose:
                 if (event.xexpose.count == 0) {
+                    draw_roulette_wheel(display, window, gc, 500, 500);
+                    XFlush(display);
                 }
                 break;
             case KeyPress: {
