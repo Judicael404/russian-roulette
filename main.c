@@ -1,15 +1,11 @@
 #include "wheel.h"
 #include "ui.h"
+#include "constants.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-#define BOX_WIDTH 80
-#define BOX_HEIGHT 180
 
 int main(int argc, char* argv[]) {
     Display* display;

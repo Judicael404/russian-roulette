@@ -1,10 +1,10 @@
 #include "wheel.h"
+#include "constants.h"
+
 #include <math.h>
 #include <X11/Xlib.h>
 #include <stdio.h>
 #include <string.h>
-
-#define NUM_SEGMENTS 24
 
 void draw_segment(Display *dpy, Window win, GC gc, int cx, int cy, int r, int start_angle, int arc_angle, unsigned long color) {
     XSetForeground(dpy, gc, color);

@@ -1,9 +1,9 @@
 #include "ui.h"
+#include "constants.h"
 #include <X11/Xlib.h>
 #include <stdio.h>
 #include <string.h>
 
-#define NUM_SEGMENTS 24
 
 void draw_box_text(Display *dpy, Window win, GC gc, int x, int y, const char* text) {
     XDrawString(dpy, win, gc, x, y, text, strlen(text));
