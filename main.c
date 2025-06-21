@@ -46,7 +46,8 @@ int main(int argc, char* argv[]) {
             case Expose:
                 if (event.xexpose.count == 0) {
                     draw_roulette_wheel(display, window, gc, 500, 500);
-                    draw_odd_numbers_box(display, window, gc,  SCREEN_WIDTH - 100, SCREEN_HEIGHT / 3, BOX_WIDTH, BOX_HEIGHT);
+                    draw_odd_numbers_box(display, window, gc,  SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4, BOX_WIDTH, BOX_HEIGHT);
+                    draw_spin_button(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 210, BOX_WIDTH, 50, "Spin the Wheel");
                     XFlush(display);
                 }
                 break;
