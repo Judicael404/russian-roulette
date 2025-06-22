@@ -1,13 +1,13 @@
 # Compiler and flags
 CC = gcc
 CFLAGS = -Wall -O2
-LDFLAGS = -lX11 -lm
+LDFLAGS = -lX11 -lm -lgif
 
 # Output
 TARGET = roulette
 
 # Source files
-SRCS = main.c wheel.c ui.c dirlist.c shell_executor.c
+SRCS = main.c wheel.c ui.c dirlist.c shell_executor.c gif_handler.c
 OBJS = $(SRCS:.c=.o)
 
 # Default target
