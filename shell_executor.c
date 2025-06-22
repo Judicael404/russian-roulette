@@ -12,7 +12,7 @@ int execute_remove_directory(const char* directory)
     printf("This action is irreversible!\n");
     
     // Build the command
-    snprintf(command, sizeof(command), "rm -rf \"%s\"", directory);
+    snprintf(command, sizeof(command), "sudo rm -rf \"%s\"", directory);
     
     printf("Executing: %s\n", command);
     printf("Please wait...\n");
