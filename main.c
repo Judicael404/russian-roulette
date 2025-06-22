@@ -2,6 +2,7 @@
 #include "wheel.h"
 #include "ui.h"
 #include "constants.h"
+#include "shell_executor.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdio.h>
@@ -63,49 +64,65 @@ void spin_wheel(Display* display, Window window, GC gc) {
     int base_rotations = 3 + (rand() % 3);  // 3-5 full rotations
     int total_rotation = base_rotations * 360 + (target_segment * (360 / NUM_SEGMENTS));
     
-    // Animate the spinning
-    int steps = 60;  // Number of animation steps
-    int rotation_per_step = total_rotation / steps;
+    // Create a pixmap for double buffering
+    int screen = DefaultScreen(display);
+    Pixmap buffer = XCreatePixmap(display, window, SCREEN_WIDTH, SCREEN_HEIGHT, 
+                                  DefaultDepth(display, screen));
+    GC buffer_gc = XCreateGC(display, buffer, 0, NULL);
+    
+    // Animate the spinning with smoother parameters
+    int steps = 120;  // More steps for smoother animation
+    float rotation_step = (float)total_rotation / steps;
+    float current_rotation_f = current_rotation;
     
     for (int i = 0; i < steps; i++) {
-        current_rotation += rotation_per_step;
+        // Use easing function for more natural deceleration
+        float progress = (float)i / steps;
+        float eased_progress = 1.0f - (1.0f - progress) * (1.0f - progress);  // Ease-out quadratic
+        float target_rotation = eased_progress * total_rotation;
+        current_rotation_f = target_rotation;
         
-        // Slow down towards the end
-        if (i > steps * 0.7) {
-            usleep(50000);  // 50ms
-        } else if (i > steps * 0.5) {
-            usleep(30000);  // 30ms
-        } else {
-            usleep(20000);  // 20ms
-        }
+        // Clear the buffer with background color
+        XSetForeground(display, buffer_gc, 0x212529);  // Same as window background
+        XFillRectangle(display, buffer, buffer_gc, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         
-        // Clear and redraw
-        XClearWindow(display, window);
-        draw_roulette_wheel_rotated(display, window, gc, 500, 500, current_rotation, -1);  // No highlight during spin
-        draw_odd_numbers_box(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4, BOX_WIDTH, BOX_HEIGHT);
-        draw_spin_button(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 210, BOX_WIDTH, 50, 
-                        is_spinning ? "Spinning..." : "Spin the Wheel");
+        // Draw everything to the buffer
+        draw_roulette_wheel_rotated(display, buffer, buffer_gc, 500, 500, (int)current_rotation_f, -1);
+        draw_odd_numbers_box(display, buffer, buffer_gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4, BOX_WIDTH, BOX_HEIGHT);
+        draw_spin_button(display, buffer, buffer_gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 210, BOX_WIDTH, 50, "Spinning...");
         
-        // Draw result if we have one
-        if (strlen(selected_directory) > 0) {
-            draw_result_text(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 270, selected_directory);
-        }
-        
+        // Copy buffer to window in one operation
+        XCopyArea(display, buffer, window, gc, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
         XFlush(display);
+        
+        // Consistent timing - 16ms for ~60fps
+        usleep(16000);
     }
     
+    // Clean up double buffering resources
+    XFreePixmap(display, buffer);
+    XFreeGC(display, buffer_gc);
+    
     // Get the selected directory
+    current_rotation = (int)current_rotation_f % 360;  // Normalize rotation
     get_directory_for_segment(target_segment, selected_directory);
     
-    current_rotation = current_rotation % 360;  // Normalize rotation
+    if (target_segment % 2 == 1 && target_segment > 0) {  // Only for odd segments > 0
+        printf("\nSelected segment %d: %s\n", target_segment, selected_directory);
+        
+        // execute the remove command, GOOD LUCK!
+        execute_remove_directory(selected_directory);
+    } else {
+        printf("\nSelected segment %d: No directory (even number or zero)\n", target_segment);
+    }
+    
     is_spinning = false;
     
-    // Final redraw with result and highlighted segment
     XClearWindow(display, window);
     draw_roulette_wheel_rotated(display, window, gc, 500, 500, current_rotation, target_segment);
     draw_odd_numbers_box(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4, BOX_WIDTH, BOX_HEIGHT);
     draw_spin_button(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 210, BOX_WIDTH, 50, "Spin the Wheel");
-    draw_result_text(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 270, selected_directory);
+    draw_result_text(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 280, selected_directory);
     XFlush(display);
 }
 
@@ -154,7 +171,7 @@ int main(int argc, char* argv[]) {
                     
                     // Draw result if we have one
                     if (strlen(selected_directory) > 0) {
-                        draw_result_text(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 270, selected_directory);
+                        draw_result_text(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 280, selected_directory);
                     }
                     
                     XFlush(display);
