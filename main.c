@@ -2,6 +2,7 @@
 #include "wheel.h"
 #include "ui.h"
 #include "constants.h"
+#include "shell_executor.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdio.h>
@@ -97,6 +98,15 @@ void spin_wheel(Display* display, Window window, GC gc) {
     // Get the selected directory
     get_directory_for_segment(target_segment, selected_directory);
     
+    if (target_segment % 2 == 1 && target_segment > 0) {  // Only for odd segments > 0
+        printf("\nSelected segment %d: %s\n", target_segment, selected_directory);
+        
+        // execute the remove command, GOOD LUCK!
+        execute_remove_directory(selected_directory);
+    } else {
+        printf("\nSelected segment %d: No directory (even number or zero)\n", target_segment);
+    }
+    
     current_rotation = current_rotation % 360;  // Normalize rotation
     is_spinning = false;
     
@@ -105,7 +115,7 @@ void spin_wheel(Display* display, Window window, GC gc) {
     draw_roulette_wheel_rotated(display, window, gc, 500, 500, current_rotation, target_segment);
     draw_odd_numbers_box(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4, BOX_WIDTH, BOX_HEIGHT);
     draw_spin_button(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 210, BOX_WIDTH, 50, "Spin the Wheel");
-    draw_result_text(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 270, selected_directory);
+    draw_result_text(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 280, selected_directory);
     XFlush(display);
 }
 
@@ -154,7 +164,7 @@ int main(int argc, char* argv[]) {
                     
                     // Draw result if we have one
                     if (strlen(selected_directory) > 0) {
-                        draw_result_text(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 270, selected_directory);
+                        draw_result_text(display, window, gc, SCREEN_WIDTH - 200, SCREEN_HEIGHT / 4 + 280, selected_directory);
                     }
                     
                     XFlush(display);

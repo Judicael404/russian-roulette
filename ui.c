@@ -32,16 +32,19 @@ void draw_result_text(Display *dpy, Window win, GC gc, int x, int y, const char*
     
     // Draw background box for result
     XSetForeground(dpy, gc, WhitePixel(dpy, screen));
-    XFillRectangle(dpy, win, gc, x, y, BOX_WIDTH, 60);
+    XFillRectangle(dpy, win, gc, x, y, BOX_WIDTH, 80);
     
     XSetForeground(dpy, gc, BlackPixel(dpy, screen));
-    XDrawRectangle(dpy, win, gc, x, y, BOX_WIDTH, 60);
+    XDrawRectangle(dpy, win, gc, x, y, BOX_WIDTH, 80);
     
     // Draw "Result:" label
     draw_box_text(dpy, win, gc, x + 5, y + 15, "Result:");
     
     // Draw the actual result
     draw_box_text(dpy, win, gc, x + 5, y + 35, result);
+    
+    // Draw execution status
+    draw_box_text(dpy, win, gc, x + 5, y + 70, "in terminal");
 }
 
 void draw_odd_numbers_box(Display *dpy, Window win, GC gc, int x, int y, int width, int height) {

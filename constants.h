@@ -3,7 +3,7 @@
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
-#define BOX_WIDTH 120
+#define BOX_WIDTH 250
 #define BOX_HEIGHT 200
 
 #define NUM_SEGMENTS 24
