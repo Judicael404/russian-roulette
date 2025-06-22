@@ -4,7 +4,8 @@
 #include <X11/Xlib.h>
 #include <gif_lib.h>
 
-typedef struct {
+typedef struct 
+{
     GifFileType* gif_file;
     int frame_count;
     int current_frame;

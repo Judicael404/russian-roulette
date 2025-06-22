@@ -1,10 +1,10 @@
 #include "shell_executor.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 // Function to execute remove directory command with console output
-int execute_remove_directory(const char* directory) {
+int execute_remove_directory(const char* directory)
+{
     char command[1024];
     
     printf("\n--- Directory Removal ---\n");
@@ -20,9 +20,12 @@ int execute_remove_directory(const char* directory) {
     // Execute the command
     int result = system(command);
     
-    if (result == 0) {
+    if (result == 0)
+    {
         printf("Successfully removed directory: %s\n", directory);
-    } else {
+    }
+    else
+    {
         printf("Failed to remove directory: %s\n", directory);
         printf("Error code: %d\n", result);
     }
