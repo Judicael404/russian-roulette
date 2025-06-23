@@ -25,7 +25,7 @@ The following directories are included in `directory_list.txt`:
 make
 sudo ./roulette
 ```
-Written in C using `X11` for graphic and `libgif` for gif rendering
+Written in C using [X11](https://www.x.org/releases/X11R7.6/doc/libX11/specs/libX11/libX11.html) for graphic and [giflib](https://giflib.sourceforge.net/) for gif rendering
 
 ---
 # 🚨🚨🚨 WARNING: EXTREME CAUTION ADVISED 🚨🚨🚨
@@ -46,7 +46,7 @@ Written in C using `X11` for graphic and `libgif` for gif rendering
 >
 > ### **DO NOT RUN THIS PROGRAM.**
 >
-> **If, despite this explicit warning, you choose to execute this program, you do so entirely at your own risk. The author is not responsible for any damage, data loss, or consequences that may arise from your actions.**
+> **If, despite this explicit warning, you choose to execute this program, you do so entirely at your own risk. The author, which is me, is not responsible for any damage, data loss, or consequences that may arise from your actions.**
 >
 > **YOU HAVE BEEN WARNED. GOOD LUCK**
 >
